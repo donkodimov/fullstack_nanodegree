@@ -254,9 +254,17 @@ def show_venue(venue_id):
   }
 
   venue = Venue.query.get(venue_id)
-  venue.upcoming_shows = [x for x in venue.shows if x.start_time > datetime.now()]
+  venue.upcoming_shows = [{'artist_id': x.artist_id, 
+                           'artist_name': x.artist.name,
+                           'artist_image_link': x.artist.image_link,
+                           'start_time': x.start_time} for x in venue.shows if x.start_time > datetime.now()]
+  print(venue.upcoming_shows)
   venue.upcoming_shows_count = len(venue.upcoming_shows)
-  venue.past_shows = [x for x in venue.shows if x.start_time < datetime.now()]
+  venue.past_shows = [{'artist_id': x.artist_id, 
+                       'artist_name': x.artist.name,
+                       'artist_image_link': x.artist.image_link,
+                       'start_time': x.start_time} for x in venue.shows if x.start_time < datetime.now()]
+  print(venue.past_shows)
   venue.past_shows_count = len(venue.past_shows)
   print(venue.past_shows_count)
   #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
