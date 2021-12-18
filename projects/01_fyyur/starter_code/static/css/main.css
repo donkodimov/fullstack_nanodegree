@@ -209,3 +209,12 @@ h2.monospace {
 .subtitle {
   opacity: 0.5;
 }
+.venue-delete {
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+  color: #444;
+  float: right;
+  cursor: pointer;
+  font-size: 14px;
+}
