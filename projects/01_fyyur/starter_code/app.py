@@ -366,16 +366,17 @@ def show_artist(artist_id):
   }
   try:
       artist = Artist.query.get(artist_id)
-      artist.upcoming_shows = [{'artist_id': x.venue_id, 
-                              'artist_name': x.venue.name,
-                              'artist_image_link': x.venue.image_link,
+      artist.upcoming_shows = [{'venue_id': x.venue_id, 
+                              'venue_name': x.venue.name,
+                              'venue_image_link': x.venue.image_link,
                               'start_time': x.start_time} for x in artist.shows if x.start_time > datetime.now()]
       artist.upcoming_shows_count = len(artist.upcoming_shows)
-      artist.past_shows = [{'artist_id': x.venue_id, 
-                          'artist_name': x.venue.name,
-                          'artist_image_link': x.venue.image_link,
+      artist.past_shows = [{'venue_id': x.venue_id, 
+                          'venue_name': x.venue.name,
+                          'venue_image_link': x.venue.image_link,
                           'start_time': x.start_time} for x in artist.shows if x.start_time < datetime.now()]
       artist.past_shows_count = len(artist.past_shows)
+      print(artist.past_shows)
       return render_template('pages/show_artist.html', artist=artist)
   except:
       return render_template('errors/500.html')
