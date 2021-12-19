@@ -270,7 +270,9 @@ def artists():
     "id": 6,
     "name": "The Wild Sax Band",
   }]
-  return render_template('pages/artists.html', artists=data)
+  artists_query = Artist.query.all()
+  artists = [{'id': x.id, 'name': x.name} for x in artists_query]
+  return render_template('pages/artists.html', artists=artists)
 
 @app.route('/artists/search', methods=['POST'])
 def search_artists():
@@ -362,8 +364,21 @@ def show_artist(artist_id):
     "past_shows_count": 0,
     "upcoming_shows_count": 3,
   }
-  data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
-  return render_template('pages/show_artist.html', artist=data)
+  try:
+      artist = Artist.query.get(artist_id)
+      artist.upcoming_shows = [{'artist_id': x.venue_id, 
+                              'artist_name': x.venue.name,
+                              'artist_image_link': x.venue.image_link,
+                              'start_time': x.start_time} for x in artist.shows if x.start_time > datetime.now()]
+      artist.upcoming_shows_count = len(artist.upcoming_shows)
+      artist.past_shows = [{'artist_id': x.venue_id, 
+                          'artist_name': x.venue.name,
+                          'artist_image_link': x.venue.image_link,
+                          'start_time': x.start_time} for x in artist.shows if x.start_time < datetime.now()]
+      artist.past_shows_count = len(artist.past_shows)
+      return render_template('pages/show_artist.html', artist=artist)
+  except:
+      return render_template('errors/500.html')
 
 #  Update
 #  ----------------------------------------------------------------

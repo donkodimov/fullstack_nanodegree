@@ -39,11 +39,9 @@ class Venue(db.Model):
     shows = db.relationship('Show', backref='venue', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
-        return '<Vanue name {}, id {}, seeking_talent {}, genres {}>'.format(
-          self.name, 
-          self.id, 
-          self.seeking_talent,
-          self.genres)
+        return f'<Vanue {self.id} {self.name} {self.genres} {self.city} {self.state} \
+            {self.address} {self.phone} {self.website_link} {self.image_link} {self.facebook_link} \
+                {self.seeking_talent} {self.seeking_description}>'
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -64,8 +62,9 @@ class Artist(db.Model):
     shows = db.relationship('Show', backref='artist', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
-        return '<Artist name {}>'.format(self.name)
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
+        return f'<Artist {self.id} {self.name} {self.genres} {self.city} {self.state} \
+            {self.phone} {self.website_link} {self.image_link} {self.facebook_link} \
+                {self.seeking_venue} {self.seeking_description}>'
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
@@ -78,4 +77,4 @@ class Show(db.Model):
     start_time = db.Column(db.DateTime, nullable = False)
     
     def __repr__(self):
-        return '<Show id {}>'.format(self.id)
+        return f'<Show {self.id} {self.venue_id} {self.artist_id} {self.start_time}>'
