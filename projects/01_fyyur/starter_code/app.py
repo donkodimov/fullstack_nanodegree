@@ -433,17 +433,13 @@ def create_artist_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
   form_input = request.form
-  print(form_input) 
-  print(form_input['name'])
   try:
       artist = Artist(**form_input)
       if artist.seeking_venue:
           artist.seeking_venue = True
       else:
           artist.seeking_venue = False
-      artist.genres = form_input.getlist('genres')
-      print(form_input.getlist('genres'))
-      print(artist) 
+      artist.genres = form_input.getlist('genres') 
       db.session.add(artist)
       db.session.commit()
       flash('Artist ' + request.form['name'] + ' was successfully listed!')
