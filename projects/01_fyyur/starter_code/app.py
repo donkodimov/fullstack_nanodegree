@@ -95,7 +95,22 @@ def search_venues():
       "num_upcoming_shows": 0,
     }]
   }
-  return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
+  search_term = request.form.get('search_term', '')
+  try:
+      results_query = Venue.query.filter(Venue.name.ilike('%'+search_term+'%'))
+      results = {'count': results_query.count(),
+                  'data': [{
+                    'id': x.id,
+                    'name': x.name,
+                    'num_upcoming_shows': Show.query.filter(Show.venue_id==x.id,
+                                          Show.start_time > datetime.now()).count()} for x in results_query.all()]}
+      return render_template('pages/search_venues.html', results=results, search_term=request.form.get('search_term', ''))
+  except:
+      flash('An error occurred. Venues could not be listed.')
+      print(sys.exc_info())
+      return render_template('errors/500.html')
+  
+  #return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
@@ -376,7 +391,6 @@ def show_artist(artist_id):
                           'venue_image_link': x.venue.image_link,
                           'start_time': x.start_time} for x in artist.shows if x.start_time < datetime.now()]
       artist.past_shows_count = len(artist.past_shows)
-      print(artist.past_shows)
       return render_template('pages/show_artist.html', artist=artist)
   except:
       return render_template('errors/500.html')
