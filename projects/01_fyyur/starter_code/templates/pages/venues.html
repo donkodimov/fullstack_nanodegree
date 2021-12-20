@@ -15,18 +15,23 @@
 		</li>
 		{% endfor %}
 	</ul>
-	<script>
-		const deletes = document.querySelectorAll('.venue-delete');
-        for (let i = 0; i < deletes.length; i++) {
-            const del = deletes[i];
-            del.onclick = function (e) {
-            const venue_id = e.target.dataset['id'];
-            fetch('/venues/' + venue_id , {
-                method: 'DELETE',
-                
-            });
-        }
-	}
-	</script>
+	
+
+
 {% endfor %}
+
+<script>
+	const deletes = document.querySelectorAll('.venue-delete');
+	for (let i = 0; i < deletes.length; i++) {
+		const del = deletes[i];
+		del.onclick = function (e) {
+		const venue_id = e.target.dataset['id'];
+		fetch('/venues/' + venue_id , {
+			method: 'DELETE',
+			
+		});
+	}
+}
+</script>
+
 {% endblock %}
