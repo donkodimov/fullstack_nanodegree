@@ -7,10 +7,25 @@
 		<a href="/artists/{{ artist.id }}">
 			<i class="fas fa-users"></i>
 			<div class="item">
-				<h5>{{ artist.name }}</h5>
+				<h5>{{ artist.name }}<button class="artist-delete" data-id="{{ artist.id }}">&cross;</button></h5>
 			</div>
 		</a>
 	</li>
 	{% endfor %}
 </ul>
+
+<script>
+	const deletes = document.querySelectorAll('.artist-delete');
+	for (let i = 0; i < deletes.length; i++) {
+		const del = deletes[i];
+		del.onclick = function (e) {
+		const artist_id = e.target.dataset['id'];
+		fetch('/artists/' + artist_id , {
+			method: 'DELETE',
+			
+		});
+	}
+}
+</script>
+
 {% endblock %}
