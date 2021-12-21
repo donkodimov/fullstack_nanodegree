@@ -7,8 +7,6 @@ import sys
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
-
-
 import logging
 from logging import Formatter, FileHandler
 from flask.json import jsonify
@@ -279,11 +277,8 @@ def edit_artist(artist_id):
 
 @app.route("/artists/<int:artist_id>/edit", methods=["POST"])
 def edit_artist_submission(artist_id):
-    # TODO: take values from the form submitted, and update existing
-    # artist record with ID <artist_id> using the new attributes
 
     form = ArtistForm(request.form)
-    print(form)
     artist = Artist.query.get(artist_id)
     try:
         artist.name = form.name.data
@@ -321,10 +316,8 @@ def edit_venue(venue_id):
 
 @app.route("/venues/<int:venue_id>/edit", methods=["POST"])
 def edit_venue_submission(venue_id):
-    # TODO: take values from the form submitted, and update existing
-    # venue record with ID <venue_id> using the new attributes
+
     form = VenueForm(request.form)
-    print(form)
     venue = Venue.query.get(venue_id)
     try:
         venue.name = form.name.data
@@ -351,7 +344,7 @@ def edit_venue_submission(venue_id):
         db.session.close()
         flash("Venue " + form.name.data + " was successfully updated!")
         return redirect(url_for("show_venue", venue_id=venue_id))
-    # return redirect(url_for('show_venue', venue_id=venue_id))
+
 
 
 #  Create Artist
@@ -366,21 +359,13 @@ def create_artist_form():
 
 @app.route("/artists/create", methods=["POST"])
 def create_artist_submission():
-    # called upon submitting the new artist listing form
-    # TODO: insert form data as a new Venue record in the db, instead
-    # TODO: modify data to be the data object returned from db insertion
+
     form_input = request.form
     try:
-        # artist = Artist(**form_input)
-        # if artist.seeking_venue:
-        #     artist.seeking_venue = True
-        # else:
-        #     artist.seeking_venue = False
-        # artist.genres = form_input.getlist("genres")
+
         artist = Artist()
         form = ArtistForm(request.form, obj=artist)
         form.populate_obj(artist)
-        print(artist)
         db.session.add(artist)
         db.session.commit()
     except:
