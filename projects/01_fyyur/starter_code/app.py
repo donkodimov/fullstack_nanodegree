@@ -151,12 +151,10 @@ def create_venue_submission():
 
     form_input = request.form
     try:
-        venue = Venue(**form_input)
-        if venue.seeking_talent:
-            venue.seeking_talent = True
-        else:
-            venue.seeking_talent = False
-        venue.genres = form_input.getlist("genres")
+
+        venue = Venue()
+        form = VenueForm(request.form, obj=venue)
+        form.populate_obj(venue)
         db.session.add(venue)
         db.session.commit()
         flash("Venue " + request.form["name"] + " was successfully listed!")
@@ -174,7 +172,6 @@ def create_venue_submission():
 
 @app.route("/venues/<venue_id>", methods=["DELETE"])
 def delete_venue(venue_id):
-
     try:
         Venue.query.filter_by(id=venue_id).delete()
         db.session.commit()
@@ -254,7 +251,20 @@ def show_artist(artist_id):
         artist.past_shows_count = len(artist.past_shows)
         return render_template("pages/show_artist.html", artist=artist)
     except:
-        return render_template("errors/500.html")
+        flash("Artist does not exist.")
+        return render_template("pages/home.html")
+
+@app.route("/artists/<artist_id>", methods=["DELETE"])
+def delete_artist(artist_id):
+    try:
+        Artist.query.filter_by(id=artist_id).delete()
+        db.session.commit()
+    except:
+        db.session.rollback()
+        print(sys.exc_info())
+    finally:
+        db.session.close()
+    return jsonify({"success": True})
 
 
 #  Update
@@ -361,12 +371,16 @@ def create_artist_submission():
     # TODO: modify data to be the data object returned from db insertion
     form_input = request.form
     try:
-        artist = Artist(**form_input)
-        if artist.seeking_venue:
-            artist.seeking_venue = True
-        else:
-            artist.seeking_venue = False
-        artist.genres = form_input.getlist("genres")
+        # artist = Artist(**form_input)
+        # if artist.seeking_venue:
+        #     artist.seeking_venue = True
+        # else:
+        #     artist.seeking_venue = False
+        # artist.genres = form_input.getlist("genres")
+        artist = Artist()
+        form = ArtistForm(request.form, obj=artist)
+        form.populate_obj(artist)
+        print(artist)
         db.session.add(artist)
         db.session.commit()
     except:
