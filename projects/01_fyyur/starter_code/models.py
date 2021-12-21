@@ -1,4 +1,3 @@
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_moment import Moment
@@ -43,7 +42,6 @@ class Venue(db.Model):
             {self.address} {self.phone} {self.website_link} {self.image_link} {self.facebook_link} \
                 {self.seeking_talent} {self.seeking_description}>'
 
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
 class Artist(db.Model):
     __tablename__ = 'Artist'
@@ -66,15 +64,18 @@ class Artist(db.Model):
             {self.phone} {self.website_link} {self.image_link} {self.facebook_link} \
                 {self.seeking_venue} {self.seeking_description}>'
 
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
 class Show(db.Model):
     __tablename__ = 'Show'
 
     id = db.Column(db.Integer, primary_key=True)
-    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable = False)
-    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable = False)
     start_time = db.Column(db.DateTime, nullable = False)
+
+    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id', ondelete='CASCADE'), nullable = False)
+    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id', ondelete='CASCADE'), nullable = False)
+    
+    venue = db.relationship('Venue')
+    artist = db.relationship('Artist')
     
     def __repr__(self):
         return f'<Show {self.id} {self.venue_id} {self.artist_id} {self.start_time}>'
