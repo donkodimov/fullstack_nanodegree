@@ -74,8 +74,5 @@ class Show(db.Model):
     venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id', ondelete='CASCADE'), nullable = False)
     artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id', ondelete='CASCADE'), nullable = False)
     
-    venue = db.relationship('Venue')
-    artist = db.relationship('Artist')
-    
     def __repr__(self):
         return f'<Show {self.id} {self.venue_id} {self.artist_id} {self.start_time}>'
