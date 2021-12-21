@@ -3,6 +3,7 @@
 # ----------------------------------------------------------------------------#
 
 import json
+from re import A
 import sys
 import dateutil.parser
 import babel
@@ -49,7 +50,11 @@ app.jinja_env.filters["datetime"] = format_datetime
 
 @app.route("/")
 def index():
-    return render_template("pages/home.html")
+
+    venues = Venue.query.order_by(Venue.id.desc()).limit(10).all()
+    artists = Artist.query.order_by(Artist.id.desc()).limit(10).all()
+
+    return render_template("pages/home.html", venues=venues, artists=artists)
 
 
 #  Venues
