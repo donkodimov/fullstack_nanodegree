@@ -66,7 +66,7 @@ def venues():
         {
             "city": x.city,
             "state": x.state,
-            "venues": Venue.query.filter_by(city=x.city).all(),
+            "venues": Venue.query.filter_by(city=x.city, state=x.state).all(),
         }
         for x in areas_query
     ]
