@@ -209,7 +209,8 @@ h2.monospace {
 .subtitle {
   opacity: 0.5;
 }
-.venue-delete {
+.venue-delete,
+.artist-delete {
   -webkit-appearance: none;
   border: none;
   outline: none;
